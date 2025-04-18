@@ -4,7 +4,7 @@ A high-quality Telegram music bot using Pyrogram and Py-TgCalls that plays songs
 
 ## Deployment
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/yourusername/telegram-music-bot)
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/kidoocoder/vocal-echo-streamer-bot)
 
 ## Features
 
