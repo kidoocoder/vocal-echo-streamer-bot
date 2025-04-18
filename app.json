@@ -31,7 +31,7 @@
   "formation": {
     "worker": {
       "quantity": 1,
-      "size": "eco"
+      "size": "Standard-1X"
     }
   }
 }
