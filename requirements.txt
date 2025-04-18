@@ -2,7 +2,7 @@
 # Core dependencies
 pyrogram==2.0.106
 tgcrypto==1.2.5
-py-tgcalls==2.1.1  # Updated to available version
+py-tgcalls==0.1.8.1
 
 # Utilities
 python-dotenv==1.0.0
