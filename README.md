@@ -1,7 +1,10 @@
-
 # Telegram Music Bot
 
 A high-quality Telegram music bot using Pyrogram and Py-TgCalls that plays songs in voice chats based on user requests. The bot uses YouTube as the primary music source and extracts audio using yt-dlp without requiring YouTube cookies.
+
+## Deployment
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/yourusername/telegram-music-bot)
 
 ## Features
 
@@ -89,3 +92,14 @@ You need a Pyrogram session string for the user account that will join voice cha
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Heroku Deployment
+
+To deploy this bot on Heroku, you'll need to set the following environment variables:
+
+- `API_ID`: Your Telegram API ID
+- `API_HASH`: Your Telegram API Hash
+- `BOT_TOKEN`: Your Telegram Bot Token
+- `SESSION_STRING`: Your Pyrogram User Session String
+
+You can obtain these by following the instructions in the "Requirements" and "Getting a Session String" sections above.
