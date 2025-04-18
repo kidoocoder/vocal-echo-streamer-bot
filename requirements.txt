@@ -2,11 +2,11 @@
 # Core dependencies
 pyrogram==2.0.106
 tgcrypto==1.2.5
-py-tgcalls==1.0.2
-yt-dlp==2023.11.14
+py-tgcalls==2.1.1  # Updated to available version
 
 # Utilities
 python-dotenv==1.0.0
+yt-dlp==2023.11.14
 
 # Heroku specific
 gunicorn==20.1.0
