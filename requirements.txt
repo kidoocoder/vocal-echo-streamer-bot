@@ -7,3 +7,6 @@ yt-dlp==2023.11.14
 
 # Utilities
 python-dotenv==1.0.0
+
+# Heroku specific
+gunicorn==20.1.0

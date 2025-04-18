@@ -1,12 +1,11 @@
-
 import os
 from typing import Dict
 
-# Bot configuration
-API_ID = 12345  # Your API ID from my.telegram.org
-API_HASH = "your_api_hash_here"  # Your API hash from my.telegram.org
-BOT_TOKEN = "your_bot_token_here"  # Your bot token from @BotFather
-SESSION_STRING = "your_session_string_here"  # Your string session for user account
+# Bot configuration from environment variables
+API_ID = int(os.environ.get('API_ID', 0))
+API_HASH = os.environ.get('API_HASH', '')
+BOT_TOKEN = os.environ.get('BOT_TOKEN', '')
+SESSION_STRING = os.environ.get('SESSION_STRING', '')
 
 # Music configuration
 MAX_PLAYLIST_SIZE = 50
