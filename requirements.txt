@@ -1,6 +1,6 @@
 
 # Core dependencies
-kurigram==2.0.106
+kurigram==2.2.1
 tgcrypto==1.2.5
 py-tgcalls==2.1.1
 
