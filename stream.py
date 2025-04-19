@@ -4,10 +4,8 @@ import logging
 from typing import Dict, Optional, Any, Callable
 from pyrogram import Client
 from pytgcalls import PyTgCalls
-from pytgcalls.types import Update
-from pytgcalls.types.input_stream import InputAudioStream
-from pytgcalls.types.input_stream.quality import HighQualityAudio
-from pytgcalls.exceptions import NoActiveGroupCall, GroupCallNotFound
+from pytgcalls.types import MediaStream, AudioQuality, GroupCallConfig
+from pytgcalls.exceptions import NoActiveGroupCall
 
 from queues import music_queue
 from config import ACTIVE_CALLS, MESSAGES
@@ -31,7 +29,7 @@ class MusicPlayer:
         await self.py_tgcalls.start()
         logger.info("PyTgCalls client started.")
     
-    async def _on_stream_end(self, _, update: Update):
+    async def _on_stream_end(self, _, update):
         """Handle stream end event."""
         chat_id = update.chat_id
         logger.info(f"Stream ended in chat {chat_id}")
@@ -43,7 +41,7 @@ class MusicPlayer:
             # No more songs, clean up
             await self.stop(chat_id)
     
-    async def _on_group_call_ended(self, _, update: Update):
+    async def _on_group_call_ended(self, _, update):
         """Handle group call ended event."""
         chat_id = update.chat_id
         logger.info(f"Group call ended in chat {chat_id}")
@@ -55,7 +53,7 @@ class MusicPlayer:
         if chat_id in ACTIVE_CALLS:
             del ACTIVE_CALLS[chat_id]
     
-    async def join_call(self, chat_id: int) -> bool:
+    async def join_call(self, chat_id: int, file_path) -> bool:
         """Join a voice chat."""
         try:
             # Check if already in call
@@ -63,13 +61,14 @@ class MusicPlayer:
                 return True
             
             # Get group call instance
-            await self.py_tgcalls.join_group_call(
+            await self.py_tgcalls.play(
                 chat_id,
-                InputAudioStream(
-                    'input.raw',  # Placeholder, will be replaced when playing
-                    HighQualityAudio(),
+                MediaStream(
+                    file_path,
+                    audio_parameters=AudioQuality.STUDIO,
+                    video_flags=MediaStream.Flags.IGNORE,
                 ),
-                stream_type=0  # Audio stream
+                GroupCallConfig(auto_start=False),
             )
             
             # Update active calls
@@ -80,7 +79,7 @@ class MusicPlayer:
             
             return True
         
-        except (NoActiveGroupCall, GroupCallNotFound):
+        except NoActiveGroupCall:
             logger.error(f"No active group call in chat {chat_id}")
             return False
         
@@ -92,7 +91,7 @@ class MusicPlayer:
         """Leave a voice chat."""
         try:
             if chat_id in self.active_streams:
-                await self.py_tgcalls.leave_group_call(chat_id)
+                await self.py_tgcalls.leave_call(chat_id)
                 
                 # Clean up
                 if chat_id in self.active_streams:
@@ -114,18 +113,9 @@ class MusicPlayer:
         try:
             # Join call if not already in call
             if chat_id not in self.active_streams:
-                success = await self.join_call(chat_id)
+                success = await self.join_call(chat_id, audio_url)
                 if not success:
                     return False
-            
-            # Start streaming
-            await self.py_tgcalls.change_stream(
-                chat_id,
-                InputAudioStream(
-                    audio_url,
-                    HighQualityAudio(),
-                )
-            )
             
             # Update active streams
             self.active_streams[chat_id] = {
@@ -143,7 +133,7 @@ class MusicPlayer:
         """Pause playback."""
         try:
             if chat_id in self.active_streams:
-                await self.py_tgcalls.pause_stream(chat_id)
+                await self.py_tgcalls.pause(chat_id)
                 self.active_streams[chat_id]["paused"] = True
                 return True
             
@@ -157,7 +147,7 @@ class MusicPlayer:
         """Resume playback."""
         try:
             if chat_id in self.active_streams and self.active_streams[chat_id].get("paused", False):
-                await self.py_tgcalls.resume_stream(chat_id)
+                await self.py_tgcalls.resume(chat_id)
                 self.active_streams[chat_id]["paused"] = False
                 return True
             
@@ -233,3 +223,4 @@ class MusicPlayer:
     def get_active_streams(self) -> Dict[int, Dict[str, Any]]:
         """Get all active streams."""
         return self.active_streams.copy()
+        
