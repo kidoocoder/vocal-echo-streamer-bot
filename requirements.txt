@@ -1,12 +1,12 @@
 
 # Core dependencies
-pyrogram==2.0.106
+kurigram==2.0.106
 tgcrypto==1.2.5
-py-tgcalls==0.1.8.1
+py-tgcalls==2.1.1
 
 # Utilities
-python-dotenv==1.0.0
-yt-dlp==2023.11.14
+python-dotenv
+yt-dlp
 
 # Heroku specific
 gunicorn==20.1.0
